@@ -8,6 +8,14 @@ export default function UserForm() {
     function handleSubmit(e) {
        e.preventDefault()
        alert(`hello ${firstName} ${lastName}`)
+       const data = {firstName, lastName};
+       localStorage.setItem("data", JSON.stringify(data))
+       JSON.parse(localStorage.getItem("data"))
+       sessionStorage.setItem("data", JSON.stringify(data))
+       JSON.parse(sessionStorage.getItem("data"))
+       //document.cookie = "hello=true";
+// document.cookie = "hello=true
+// expires=Fri, 31 Jan 2023 11:11:11 GMT";
        resetFirstName()
        resetLastName()
     }

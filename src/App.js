@@ -15,6 +15,7 @@ import useRandomJoke from './useRandomJoke';
 import Counter from './Counter';
 import ErrorBoundary from './ErrorBoundary';
 import UserForm from './UserForm';
+import Framer from './Framer';
 function App() {
   
    
@@ -23,6 +24,7 @@ function App() {
     <div className="App">
       <>
         {/* <UserForm/> */}
+        <Framer/>
       
       {/* <BrowserRouter>
       <Routes>
