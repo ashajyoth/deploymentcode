@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, useField } from 'formik';
+import { Formik, Form, useField, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 const MyTextInput = ({ label, ...props }) => {
@@ -10,20 +10,23 @@ const MyTextInput = ({ label, ...props }) => {
   return (
     <>
       <label htmlFor={props.id || props.name}>{label}</label>
-      <input className="text-input" {...field} {...props} />
+      <input className="text-input" {...field} {...props} style= {{color: 'blue', border: "1px solid yellow"}} />
       {meta.touched && meta.error ? (
         <div className="error"style={{color: "red"}}>{meta.error}</div>
       ) : null}
+       {/* <ErrorMessage component="div" name="email" /> */}
     </>
   );
 };
 
 const MyCheckbox = ({ children, ...props }) => {
+  
   // React treats radios and checkbox inputs differently other input types, select, and textarea.
   // Formik does this too! When you specify `type` to useField(), it will
   // return the correct bag of props for you -- a `checked` prop will be included
   // in `field` alongside `name`, `value`, `onChange`, and `onBlur`
   const [field, meta] = useField({ ...props, type: 'checkbox' });
+  console.log("children", children);
   return (
     <div>
       <label className="checkbox-input">
@@ -39,10 +42,12 @@ const MyCheckbox = ({ children, ...props }) => {
 
 const MySelect = ({ label, ...props }) => {
   const [field, meta] = useField(props);
+   console.log("props", props);
   return (
     <div>
       <label htmlFor={props.id || props.name}>{label}</label>
       <select {...field} {...props} />
+     
       {meta.touched && meta.error ? (
         <div className="error" style={{color: "red"}}>{meta.error}</div>
       ) : null}
@@ -59,20 +64,31 @@ const SignupForm = () => {
         initialValues={{
           firstName: '',
           lastName: '',
+          userName: "",
           email: '',
           acceptedTerms: false, // added for our checkbox
           jobType: '', // added for our select
         }}
-        validationSchema={Yup.object({
+        validationSchema={Yup.object().shape({
           firstName: Yup.string()
-            .max(15, 'Must be 15 characters or less')
+            
             .required('Required'),
           lastName: Yup.string()
             .max(20, 'Must be 20 characters or less')
             .required('Required'),
+            userName: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, 'Username can only contain alphanumeric characters')
+    .required('Username is required'),
           email: Yup.string()
             .email('Invalid email address')
-            .required('Required'),
+            .required(' Email is Required'),
+    //         password: yup.string()
+    // .required("Please enter your password")
+    // .matches(
+    //   /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+    //   "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+    // ),
+  
           acceptedTerms: Yup.boolean()
             .required('Required')
             .oneOf([true], 'You must accept the terms and conditions.'),
@@ -83,10 +99,10 @@ const SignupForm = () => {
             )
             .required('Required'),
         })}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values) => {
           setTimeout(() => {
             alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
+          
           }, 400);
         }}
       >
@@ -104,7 +120,12 @@ const SignupForm = () => {
             type="text"
             placeholder="Last Name"
           />
-
+          <MyTextInput
+            label="User Name"
+            name="userName"
+            type="text"
+            placeholder="User Name"
+          />
           <MyTextInput
             label="Email Address"
             name="email"
@@ -121,7 +142,7 @@ const SignupForm = () => {
           </MySelect>
 
           <MyCheckbox name="acceptedTerms">
-            I accept the terms and conditions
+           I accept the terms and conditions
           </MyCheckbox>
 
           <button type="submit">Submit</button>

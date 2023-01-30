@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import axios from "axios";
 import Login from "./Login";
 
 jest.mock("axios", () => ({
@@ -137,3 +138,28 @@ test("user should be rendered after fetching", async () => {
 
   expect(userItem).toBeInTheDocument();
 });
+
+test('fetches data from API and displays message', async () => {
+  const responseData = { message: 'some message' };
+  axios.get.mockResolvedValueOnce(responseData);
+
+  const { getByText } = render(<Login />);
+
+  const messageElement =  getByText(responseData.message);
+
+  expect(messageElement).toBeInTheDocument();
+});
+// test('fetches data from API and displays message after 5 seconds', async () => {
+//   const responseData = { message: 'some message' };
+//   axios.get.mockResolvedValueOnce(responseData);
+
+//   const { getByText } = render(<Login />);
+
+//   await wait(() => getByText(responseData.message), {
+//     timeout: 6000,
+//   });
+
+//   const messageElement = getByText(responseData.message);
+
+//   expect(messageElement).toBeInTheDocument();
+// });

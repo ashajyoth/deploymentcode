@@ -1,6 +1,7 @@
 
 import './App.css';
-import React, {useState, useEffect, Component} from 'react';
+
+import React, {useState, useEffect, Component, Suspense, lazy} from 'react';
 import {  Routes, Route, BrowserRouter } from "react-router-dom";
 // import NavList from './Topics/Route';
 import Home from './Home';
@@ -17,16 +18,20 @@ import ErrorBoundary from './ErrorBoundary';
 import UserForm from './UserForm';
 import Framer from './Framer';
 function App() {
-  
+  const Framer = React.lazy(() => import ("./Framer"));
    
   return (
     
     <div className="App">
       <>
-        {/* <UserForm/> */}
+         {/* <UserForm/> */}
+         {/* <Login/> */}
+         {/* <Suspense fallback = {<div>Loading ...</div>}>
         <Framer/>
-      
+        </Suspense> */}
+         <SignupForm/> 
       {/* <BrowserRouter>
+
       <Routes>
         <Route path = "/" element= {<Home/>} >
           <Route index element = {<Index/>} />
@@ -42,11 +47,13 @@ function App() {
          </Route>
       </Routes>
       </BrowserRouter> */}
-    
+      {/* <ErrorBoundary fallbackComponent= {}>
+
+      </ErrorBoundary> */}
       {/* <Events/> */}
       {/* <Login/> */}
      
-       {/* <SignupForm/> */}
+        
        {/* <center>
         <h1>JOke Generator</h1>
         <h2>{joke}</h2>
